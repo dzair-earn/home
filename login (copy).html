@@ -1,0 +1,176 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: #ff4136;
+            margin-top: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+      <form action="/login" method="post" onsubmit="return handleFormSubmit()">
+        <h2>Login</h2>
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+        <button type="button" onclick="redirectToHomePage()" style="background-color: #007BFF; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px;">
+            Don't have an account? Sign up
+        </button>
+    </form>
+        <div class="error-message">
+            <!-- Error message will be displayed here using JavaScript -->
+        </div>
+    </form>
+
+    <!-- Modal for alerts -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+  <script>
+      function redirectToHomePage() {
+          window.location.href = '/';
+      }
+
+      function handleFormSubmit() {
+          // Check for a query parameter indicating unsuccessful login
+          const urlParams = new URLSearchParams(window.location.search);
+          const errorParam = urlParams.get('error');
+
+          // If the query parameter is present, show an error message
+          if (errorParam === 'true') {
+              const errorMessage = document.querySelector('.error-message');
+              errorMessage.textContent = 'Invalid email or password. Please try again.';
+
+              // Display modern modal alert
+              const modal = document.getElementById('myModal');
+              const modalMessage = document.getElementById('modalMessage');
+              modalMessage.textContent = errorMessage.textContent;
+              modal.style.display = 'block';
+
+              // Prevent the default form submission only if there are no errors
+              return errorParam !== 'true';
+          }
+
+          // Continue with the form submission
+          return true;
+      }
+
+      // Close the modal when the user clicks on the close button
+      document.getElementsByClassName('close')[0].addEventListener('click', () => {
+          const modal = document.getElementById('myModal');
+          modal.style.display = 'none';
+      });
+
+      // Close the modal when the user clicks outside the modal
+      window.addEventListener('click', (event) => {
+          const modal = document.getElementById('myModal');
+          if (event.target === modal) {
+              modal.style.display = 'none';
+          }
+      });
+  </script>
+
+
+</body>
+</html>

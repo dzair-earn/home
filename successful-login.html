@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Successful Login</title>
+    <style>
+        body {
+            background-color: #4CAF50; /* Green background color */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff; /* White text color */
+        }
+
+        .message {
+            text-align: center;
+            padding: 20px;
+            background-color: #45a049; /* Darker green background color */
+            border-radius: 8px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <p>Successful login! You are being redirected to your dashboard.</p>
+    </div>
+
+    <script>
+        // Redirect to /dashboard after a delay (e.g., 3 seconds)
+        setTimeout(() => {
+            window.location.href = '/dashboard';
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!-- public/wallet.html -->
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Your Wallet</title>
+      <style>
+
+          body {
+              font-family: 'Arial', sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #f1f1f1;
+              text-align: center;
+          }
+        header {
+            background-color: #0F52BA;
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        img {
+          width:150px;
+          height:50px;
+          margin-left: 15px;
+        }
+          nav {
+              display: flex;
+              justify-content: space-around;
+              margin-top: 10px;
+          }
+
+          nav button {
+              background-color: #4caf50;
+              color: white;
+              border: none;
+              padding: 10px 15px;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 16px;
+          }
+
+          nav button:hover {
+              background-color: #45a049;
+          }
+
+          h1 {
+              color: #333;
+              margin-top: 50px;
+          }
+
+          h4 {
+              color: #555;
+          }
+
+          p {
+              color: #555;
+              font-size: 18px;
+              margin-bottom: 30px;
+          }
+
+          #balance, #requestedAmount, #paymentStatus {
+              color: #333;
+              font-size: 20px;
+              margin-bottom: 20px;
+          }
+
+          button {
+              width: 40%;
+              background-color: #4caf50;
+              color: white;
+              padding: 10px;
+              border: none;
+              border-radius: 4px;
+              font-size: 16px;
+              cursor: pointer;
+          }
+
+          button:hover {
+              background-color: #45a049;
+          }
+
+          .container {
+              max-width: 600px;
+              margin: 0 auto;
+          }
+
+          /* Modal styles */
+          .modal {
+              display: none;
+              position: fixed;
+              z-index: 1;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              overflow: auto;
+              background-color: rgba(0, 0, 0, 0.4);
+          }
+
+          .modal-content {
+              background-color: #fefefe;
+              margin: 15% auto;
+              padding: 20px;
+              border: 1px solid #888;
+              width: 80%;
+              border-radius: 8px;
+          }
+
+          .close {
+              color: #aaa;
+              float: right;
+              font-size: 28px;
+              font-weight: bold;
+          }
+
+          .close:hover,
+          .close:focus {
+              color: black;
+              text-decoration: none;
+              cursor: pointer;
+          }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer div {
+            flex: 1;
+            color: white; /* Set the text color to white */
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            color: white; /* Set the text color to white */
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Social Media Icons */
+        footer img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        footer div p {
+            color: white !important; /* Add !important to override other styles */
+        }
+      </style>
+  </head>
+  <body>
+    <header>
+        <!-- Website Logo -->
+        <img src="images/logo.png" alt="Website Logo">
+      <button onclick="location.href='/dashboard'">dashboard</button>
+      <nav>
+      </nav>
+    </header>
+
+      <div class="container">
+          <h1>Your Wallet</h1>
+          <p id="balance"></p>
+
+          <p id="requestedAmount"></p>
+          <h4>Payment may take up to 10 days. Please be patient.</h4>
+
+          <!-- Request Payment Button -->
+          <button id="requestPaymentBtn">Request Payment</button>
+
+          <!-- Payment Status Placeholder -->
+          <p id="paymentStatus" style="display: none;"></p>
+      </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <script>
+      function displayModalAlert(message) {
+          const modal = document.getElementById('myModal');
+          const modalMessage = document.getElementById('modalMessage');
+          modalMessage.textContent = message;
+          modal.style.display = 'block';
+      }
+
+
+      // Function to fetch the latest exchange rate
+      async function fetchExchangeRate() {
+          try {
+              const response = await fetch('https://open.er-api.com/v6/latest/USD');
+              const data = await response.json();
+              return data.rates.DZD || 0; 
+          } catch (error) {
+              console.error('Error fetching exchange rate:', error);
+              return 0;
+          }
+      }
+
+      async function convertToCurrency(amountInUSD, currencyCode) {
+          const exchangeRate = await fetchExchangeRate();
+          const amountInCurrency = amountInUSD * exchangeRate;
+          return amountInCurrency.toFixed(2); // Limit to two decimal places
+      }
+
+      function updatePaymentStatus() {
+          document.getElementById('requestPaymentBtn').style.display = 'none';
+          document.getElementById('paymentStatus').style.display = 'block';
+          document.getElementById('paymentStatus').textContent = 'Your request is under review. Payment process can take up to 10 days.';
+      }
+
+      async function fetchRequestedAmount() {
+          try {
+              const response = await fetch('/getRequestedAmount');
+              const data = await response.json();
+              if (data.success) {
+                  const requestedAmountInLocalCurrency = await convertToCurrency(data.requestedAmount, 'DZD');
+                  document.getElementById('requestedAmount').textContent = `Requested Amount: ${data.requestedAmount}$ (~${requestedAmountInLocalCurrency} DZD)`;
+              } else {
+                  console.error('Error fetching requested amount:', data.error);
+                  document.getElementById('requestedAmount').textContent = 'Error fetching requested amount. Please try again.';
+              }
+          } catch (error) {
+              console.error('Error fetching requested amount:', error);
+              document.getElementById('requestedAmount').textContent = 'Error fetching requested amount. Please try again.';
+          }
+      }
+      document.getElementById('requestPaymentBtn').addEventListener('click', () => {
+          fetch('/requestPayment', { method: 'POST' })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      updatePaymentStatus();
+                      fetchRequestedAmount();
+                  } else {
+                      console.error('Error requesting payment:', data.error);
+                        displayModalAlert(data.error); // Display modern modal alert;
+                  }
+              })
+              .catch(error => console.error('Error requesting payment:', error));
+      });
+
+      // Fetch user's balance and display it
+      fetch('/getBalance')
+          .then(response => response.json())
+          .then(async data => {
+              if (data.success) {
+                  const balanceInLocalCurrency = await convertToCurrency(data.balance, 'DZD');
+                  document.getElementById('balance').textContent = `Balance: ${data.balance}$ (~${balanceInLocalCurrency} DZD)`;
+              } else {
+                  console.error('Error fetching balance:', data.error);
+                  document.getElementById('balance').textContent = 'Error fetching balance. Please try again.';
+              }
+          })
+          .catch(error => console.error('Error fetching balance:', error));
+
+      // Call the function to fetch and display requested amount
+      fetchRequestedAmount();
+      // Close the modal when the user clicks on the close button
+      document.getElementsByClassName('close')[0].addEventListener('click', () => {
+          const modal = document.getElementById('myModal');
+          modal.style.display = 'none';
+      });
+
+      // Close the modal when the user clicks outside the modal
+      window.addEventListener('click', (event) => {
+          const modal = document.getElementById('myModal');
+          if (event.target === modal) {
+              modal.style.display = 'none';
+          }
+      });
+
+  </script>
+</body>
+    <footer>
+      <div>
+          <p>&copy; 2023 Dzair Earn. All rights reserved.<br>Designed by I.E Aris</p>
+      </div>
+        <div>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/terms-of-use">Terms of Use</a>
+        </div>
+        <div>
+            <!-- Social Media Icons -->
+            <a href="https://www.facebook.com/yourcompany" target="_blank">
+                <img src="facebook-icon.png" alt="Facebook Icon">
+            </a>
+            <a href="https://www.youtube.com/yourcompany" target="_blank">
+                <img src="youtube-icon.png" alt="YouTube Icon">
+            </a>
+            <a href="https://www.tiktok.com/@yourcompany" target="_blank">
+                <img src="tiktok-icon.png" alt="TikTok Icon">
+            </a>
+        </div>
+    </footer>
+</html>

@@ -1,0 +1,262 @@
+<!--settings.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+      header {
+            background-color: #0F52BA;
+            padding: 15px;
+            color: white;
+            text-align: right;
+          display: flex;
+        }
+      img {
+          margin-right: auto; /* Move the logo to the left */
+      }
+      nav {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 10px;
+      }
+
+        nav button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        nav button:hover {
+            background-color: #45a049;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+      main button {
+          background-color: #3498db;
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 18px;
+          transition: background-color 0.3s;
+      }
+
+      main button:hover {
+          background-color: #2980b9;
+      }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+      /* Add these styles for the dropdown menu */
+      .dropdown {
+          display: inline-block;
+      }
+
+      .dropbtn {
+          background-color: #ccc; /* Use a different color to indicate it's disabled */
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+          font-size: 18px;
+      }
+
+      .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        right: 0;
+      }
+
+      .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+
+      .dropdown-content a:hover {
+          background-color: #f1f1f1;
+      }
+
+      /* Show the dropdown content when hover over dropdown */
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Website Logo and Navbar -->
+        <img src="your_logo.png" alt="Website Logo">
+      <!-- Update the nav section in your HTML -->
+      <div class="dropdown">
+        <button class="dropbtn" disabled>Menu</button>
+          <div class="dropdown-content">
+              <a href="/dashboard">Dashboard</a>
+            <a href="/wallet">Wallet</a>
+              <a href="/about">About</a>
+          </div>
+      </div>
+      <nav>
+      </nav>
+    </header>
+
+    <main>
+        <h2>Change Password</h2>
+        <form id="changePasswordForm" action="/settings" method="post">
+            <label for="email">Email:</label>
+            <input type="email" name="email" required><br>
+
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" name="currentPassword" required><br>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" name="newPassword" required><br>
+
+            <label for="confirmNewPassword">Confirm New Password:</label>
+            <input type="password" name="confirmNewPassword" required><br>
+
+            <button type="submit">Change Password</button>
+        </form>
+
+        <!-- Modal for alerts -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
+
+        <script>
+            // Display alerts based on query parameters in a modal
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('successMessage');
+            const errorMessage = urlParams.get('errorMessage');
+
+            if (successMessage) {
+                const modal = document.getElementById('myModal');
+                const modalMessage = document.getElementById('modalMessage');
+                modalMessage.textContent = successMessage;
+                modal.style.display = 'block';
+
+                // Redirect to /dashboard after displaying the alert
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 3000); // Adjust the timeout as needed
+            }
+
+            if (errorMessage) {
+                const modal = document.getElementById('myModal');
+                const modalMessage = document.getElementById('modalMessage');
+                modalMessage.textContent = errorMessage;
+                modal.style.display = 'block';
+
+                // Redirect to /settings after displaying the alert
+                setTimeout(() => {
+                    window.location.href = '/settings';
+                }, 3000); // Adjust the timeout as needed
+            }
+
+            // Close the modal when the user clicks on the close button
+            document.getElementsByClassName('close')[0].addEventListener('click', () => {
+                const modal = document.getElementById('myModal');
+                modal.style.display = 'none';
+            });
+
+            // Close the modal when the user clicks outside the modal
+            window.addEventListener('click', (event) => {
+                const modal = document.getElementById('myModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        </script>
+    </main>
+</body>
+</html>

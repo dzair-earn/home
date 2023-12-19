@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .success-message, .error-message {
+            color: #333;
+            margin-top: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+      footer {
+          background-color: #333;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          display: flex;
+          justify-content: space-between;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+      }
+
+
+      footer div {
+          flex: 1;
+      }
+
+      footer p {
+          margin: 0;
+          font-size: 14px;
+      }
+
+      footer a {
+          color: #fff;
+          text-decoration: none;
+          margin: 0 10px;
+      }
+
+      footer a:hover {
+          text-decoration: underline;
+      }
+
+      /* Social Media Icons */
+      footer img {
+          width: 30px; /* Adjust the size as needed */
+          height: 30px;
+          margin-right: 10px;
+      }
+      /* Popup styling */
+      .popup {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          justify-content: center;
+          align-items: center;
+          z-index: 1;
+      }
+
+      .popup-content {
+          background: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: left;
+          max-width: 400px;
+          margin: 0 auto;
+      }
+
+      .popup-button {
+          background-color: #4caf50;
+          color: white;
+          text-decoration: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          font-size: 16px;
+          cursor: pointer;
+          display: inline-block;
+          margin-top: 10px;
+      }
+    </style>
+</head>
+<body>
+    <form id="signupForm" action="/signup" method="post">
+        <h2>Signup</h2>
+        <label for="fullname">Fullname:</label>
+        <input type="text" name="fullname" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label for="creditCardNumber">Credit Card Number:</label>
+        <input type="text" name="creditCardNumber" required><br>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" name="phoneNumber" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+      <label for="referralCode">ReferralCode:</label>
+      <input type="text" name="referralCode" placeholder="Referral Code (optional)">
+
+        <button type="submit">Signup</button>
+        <a href="/login">Login instead?</a>
+
+        <div class="success-message">
+            <!-- Success message will be displayed here using JavaScript -->
+        </div>
+        <div class="error-message">
+            <!-- Error message will be displayed here using JavaScript -->
+        </div>
+    </form>
+
+    <!-- Modal for alerts -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h2>Terms and Privacy</h2>
+            <a href="/terms-of-use" class="popup-button">Terms of Use</a>
+            <a href="/privacy-policy" class="popup-button">Privacy Policy</a>
+            <button onclick="closePopup()" class="popup-button">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Check for a query parameter indicating successful signup
+        const urlParams = new URLSearchParams(window.location.search);
+        const successParam = urlParams.get('success');
+
+        // If the query parameter is present, show a success message
+        if (successParam === 'true') {
+            const successMessage = document.querySelector('.success-message');
+
+            // Create a div to hold the success message and login button
+            const successContainer = document.createElement('div');
+
+            // Set the success message content
+            successMessage.textContent = 'Signup successful! You can now ';
+
+            // Create a Login button
+            const loginButton = document.createElement('a');
+            loginButton.href = '/login';
+            loginButton.textContent = 'Login to your account';
+
+            // Append the Login button to the success message
+            successContainer.appendChild(successMessage);
+            successContainer.appendChild(loginButton);
+
+            // Display modern modal alert
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.appendChild(successContainer); // Append the container to modal
+            modal.style.display = 'block';
+        }
+
+        // Check for a query parameter indicating an error during signup
+        const errorParam = urlParams.get('error');
+
+        if (errorParam === 'emailRegistered') {
+            const errorMessage = document.querySelector('.error-message');
+            errorMessage.textContent = 'Email is already registered. Please use a different email.';
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = errorMessage.textContent;
+            modal.style.display = 'block';
+        } else if (errorParam === 'signupError') {
+            const errorMessage = document.querySelector('.error-message');
+            errorMessage.textContent = 'Error during signup. Please try again.';
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = errorMessage.textContent;
+            modal.style.display = 'block';
+        } else if (errorParam === 'invalidEmailDomain') {
+            const errorMessage = document.querySelector('.error-message');
+            errorMessage.textContent = 'Invalid email domain. Please use a valid email address.';
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = errorMessage.textContent;
+            modal.style.display = 'block';
+        } else if (errorParam === 'invalidPassword') {
+            const errorMessage = document.querySelector('.error-message');
+            errorMessage.textContent = 'Invalid password. Password should be at least 8 characters and include letters and numbers.';
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = errorMessage.textContent;
+            modal.style.display = 'block';
+        } else if (errorParam === 'invalidCreditCardNumber') {
+            const errorMessage = document.querySelector('.error-message');
+            errorMessage.textContent = 'Invalid credit card number. Please enter a 16-digit number.';
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = errorMessage.textContent;
+            modal.style.display = 'block';
+        }
+
+        // Close the modal when the user clicks on the close button
+        document.getElementsByClassName('close')[0].addEventListener('click', () => {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        });
+
+        // Close the modal when the user clicks outside the modal
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Display the popup on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('popup').style.display = 'flex';
+        });
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+<!-- Add this section at the end of your dashboard.html file -->
+<footer>
+    <div>
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
+    </div>
+    <div>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms-of-use">Terms of Use</a>
+    </div>
+    <div>
+        <!-- Social Media Icons -->
+        <a href="https://www.facebook.com/yourcompany" target="_blank">
+            <img src="facebook-icon.png" alt="Facebook Icon">
+        </a>
+        <a href="https://www.youtube.com/yourcompany" target="_blank">
+            <img src="youtube-icon.png" alt="YouTube Icon">
+        </a>
+        <a href="https://www.tiktok.com/@yourcompany" target="_blank">
+            <img src="tiktok-icon.png" alt="TikTok Icon">
+        </a>
+    </div>
+</footer>
+</html>

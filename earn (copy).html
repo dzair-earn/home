@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn</title>
+    <style>
+        /* Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1; /* Light gray background */
+        }
+
+        header {
+            background-color: #0F52BA;
+            padding: 15px;
+            color: white;
+            text-align: right;
+          display: flex;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+          margin-right: auto;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s; /* Smooth hover transition */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Earn Box */
+        .earn-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background-color: #3498db; /* Blue box */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            animation: pulse 1s infinite; /* Added animation */
+        }
+
+        @keyframes pulse {
+          0% {
+              transform: translate(-50%, -50%) scale(1);
+          }
+          50% {
+              transform: translate(-50%, -50%) scale(1.1);
+          }
+          100% {
+              transform: translate(-50%, -50%) scale(1);
+          }
+      }
+
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s; /* Smooth color transition */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .refresh-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s; /* Smooth hover transition */
+        }
+
+        .refresh-btn:hover {
+            background-color: #45a049;
+        }
+      .dropdown {
+          display: inline-block;
+      }
+
+      .dropbtn {
+          background-color: #ccc; /* Use a different color to indicate it's disabled */
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+          font-size: 18px;
+      }
+
+      .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        right: 0;
+      }
+
+      .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+
+      .dropdown-content a:hover {
+          background-color: #f1f1f1;
+      }
+
+      /* Show the dropdown content when hover over dropdown */
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+      @media only screen and (max-width: 600px) {
+          /* Adjustments for smaller screens */
+          .box {
+              width: 100%; /* Full width on small screens */
+              max-width: none; /* No maximum width on smaller screens */
+          }
+      }
+      footer {
+          background-color: #333;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          display: flex;
+          justify-content: space-between;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+      }
+
+
+      footer div {
+          flex: 1;
+      }
+
+      footer p {
+          margin: 0;
+          font-size: 14px;
+      }
+
+      footer a {
+          color: #fff;
+          text-decoration: none;
+          margin: 0 10px;
+      }
+
+      footer a:hover {
+          text-decoration: underline;
+      }
+
+      /* Social Media Icons */
+      footer img {
+          width: 30px; /* Adjust the size as needed */
+          height: 30px;
+          margin-right: 10px;
+      }
+    </style>
+</head>
+<body>
+    <!-- Logo and Navigation -->
+    <header>
+        <img src="your_logo.png" alt="Website Logo">
+      <div class="dropdown">
+        <button class="dropbtn" disabled>Menu</button>
+          <div class="dropdown-content">
+              <a href="/dashboard">Dashboard</a>
+            <a href="/settings">Settings</a>
+            <a href="/wallet">Wallet</a>
+          </div>
+      </div>
+      <nav>
+
+      </nav>
+    </header>
+
+    <!-- Earn Box -->
+    <div class="earn-box">
+        <button onclick="openLink()">Earn Now</button>
+    </div>
+
+    <!-- Modal for alerts -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modalMessage"></p>
+            <button class="refresh-btn" onclick="refreshPage()">Ok</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // JavaScript
+        let timerId;
+
+        function startTimer() {
+            const timerElement = document.createElement('p');
+            timerElement.textContent = '15 seconds remaining';
+            const earnBox = document.querySelector('.earn-box');
+            const earnButton = document.querySelector('.earn-box button');
+            earnButton.parentNode.removeChild(earnButton);
+            earnBox.appendChild(timerElement);
+
+            timerId = setInterval(() => {
+                let remainingTime = parseInt(timerElement.textContent.split(' ')[0]);
+                if (remainingTime === 0) {
+                    clearInterval(timerId);
+                    const addedAmount = 0.0001;
+                    fetch(`/updateBalance?amount=${addedAmount}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            displayModal(`${addedAmount}$ has been added to your balance.`, true);
+                        })
+                        .catch(error => {
+                            console.error('Error updating balance:', error);
+                            displayModal('Error updating balance. Please try again.', false);
+                        });
+                } else {
+                    timerElement.textContent = `${remainingTime - 1} seconds remaining`;
+                }
+            }, 1000);
+        }
+
+        function openLink() {
+            // Replace the link with your desired URL
+            const earnLink = 'https://r-q-e.com/6fd2d0c15458225098a0/cc1abbb283/?placementName=default';
+
+            // Open the link in a new tab
+            window.open(earnLink, '_blank');
+
+            // Start the timer after opening the link
+            startTimer();
+        }
+
+        // Function to display modal
+        function displayModal(message, isSuccess) {
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.style.display = 'block';
+
+            // Add style based on success or failure
+            if (isSuccess) {
+                modal.style.backgroundColor = '#4CAF50'; // Green color for success
+            } else {
+                modal.style.backgroundColor = '#FF4136'; // Red color for failure
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        }
+
+        // Function to manually refresh the page
+        function refreshPage() {
+            location.reload();
+        }
+    </script>
+</body>
+  <!-- Add this section at the end of your dashboard.html file -->
+  <footer>
+      <div>
+          <p>&copy; 2023 Dzair Earn. All rights reserved.</p>
+      </div>
+      <div>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms-of-use">Terms of Use</a>
+      </div>
+      <div>
+          <!-- Social Media Icons -->
+          <a href="https://www.facebook.com/yourcompany" target="_blank">
+              <img src="facebook-icon.png" alt="Facebook Icon">
+          </a>
+          <a href="https://www.youtube.com/yourcompany" target="_blank">
+              <img src="youtube-icon.png" alt="YouTube Icon">
+          </a>
+          <a href="https://www.tiktok.com/@yourcompany" target="_blank">
+              <img src="tiktok-icon.png" alt="TikTok Icon">
+          </a>
+      </div>
+  </footer>
+</html>
