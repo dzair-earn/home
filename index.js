@@ -4,9 +4,9 @@ const app = express();
 const path =require ('path')
 const fs =require('fs')
 const port = 3000;
-const loginRouter = require('./routes/login');
-const signupRouter = require('./routes/signup');
-const settingsRouter = require('./routes/settings');
+const loginRouter = require('./login');
+const signupRouter = require('./signup');
+const settingsRouter = require('./settings');
 const session = require('express-session');
 const ejs = require('ejs')
 
@@ -120,27 +120,27 @@ app.get('/leaderboard', (req, res) => {
 
 
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'about.html'))
+  res.sendFile('about.html')
 });
 
 
 app.get('/privacy-policy', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'privacy.html'))
+  res.sendFile('privacy.html')
 });
 
 app.get('/terms-of-use', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'terms.html'))
+  res.sendFile('terms.html')
 });
 
 
 
 app.get('/contact', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'contact.html'));
+    res.sendFile('contact.html')
 });
 
 
 app.get('/restore-password', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'password.html'));
+    res.sendFile('password.html')
 });
 
 
@@ -155,17 +155,17 @@ app.get('/admin/contactus', (req, res) => {
 
 
 
-app.use('/admin/admin.html', express.static(path.join(__dirname, 'public/admin/admin.html')));
+app.use('/admin.html', express.static(path.join(__dirname, 'public/admin/admin.html')));
 
-const adminLoginRouter = require('./routes/admin/login');
+const adminLoginRouter = require('/Alogin');
 
 app.use('/admin', adminLoginRouter);
 
 
 
 
-app.get('/admin/adminblog', isAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin', 'adminblog.html'));
+app.get('/adminblog', isAdmin, (req, res) => {
+    res.sendFile('adminblog.html')
 });
 
 
@@ -178,7 +178,7 @@ if (!fs.existsSync(blogsFolderPath)) {
 }
 
 // Route to handle the blog creation form submission
-app.post('/admin/adminblog/create', isAdmin, (req, res) => {
+app.post('/adminblog/create', isAdmin, (req, res) => {
   console.log('Received blog creation request:', req.body); // Add this line for logging
 
     const { blogTitle, blogContent } = req.body;
@@ -610,20 +610,20 @@ app.use('/login', loginRouter);
 app.use('/settings', settingsRouter);
 
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+  res.sendFile('dashboard.html')
 });
 
 app.get('/earn', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'earn.html'));
+  res.sendFile('earn.html'));
 });
 
 app.get('/earn2', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'earn2.html'));
+  res.sendFile('earn2.html')
 });
 
 
 app.get('/wallet', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'wallet.html'));
+  res.sendFile('wallet.html')
 });
 
 
@@ -636,9 +636,6 @@ app.get('/about', (req, res) => {
 });
 
 
-app.get('/browser', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'browser.html'))
-});
 
 app.get('/load-content', async (req, res) => {
   try {
