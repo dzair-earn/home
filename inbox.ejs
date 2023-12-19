@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+      header {
+            background-color: #0F52BA;
+            padding: 15px;
+            color: white;
+            text-align: right;
+          display: flex;
+        }
+      img {
+          margin-right: auto; /* Move the logo to the left */
+      }
+      dropdown {
+          display: inline-block;
+      }
+
+      .dropbtn {
+          background-color: #ccc; /* Use a different color to indicate it's disabled */
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+          font-size: 18px;
+      }
+
+      .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        right: 0;
+      }
+
+      .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+
+      .dropdown-content a:hover {
+          background-color: #f1f1f1;
+      }
+
+      /* Show the dropdown content when hover over dropdown */
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            margin: 0;
+            color: #555;
+        }
+
+        p:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .no-records {
+            text-align: center;
+            color: #777;
+        }
+
+      footer {
+          background-color: #333;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          display: flex;
+          justify-content: space-between;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+      }
+
+      footer div {
+          flex: 1;
+          color: white; /* Set the text color to white */
+      }
+
+      footer p {
+          margin: 0;
+          font-size: 14px;
+          color: white; /* Set the text color to white */
+      }
+
+      footer a {
+          color: #fff;
+          text-decoration: none;
+          margin: 0 10px;
+      }
+
+      footer a:hover {
+          text-decoration: underline;
+      }
+
+      /* Social Media Icons */
+      footer img {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+      }
+      footer div p {
+          color: white !important; /* Add !important to override other styles */
+      }
+
+    </style>
+</head>
+<body>
+  <header>
+      <!-- Website Logo and Navbar -->
+      <img src="images/logo.png" alt="Website Logo" style="width:150px; height:50px;">
+    <div class="dropdown">
+        <button class="dropbtn" disabled>Menu</button>
+        <div class="dropdown-content">
+            <a href="/settings">Settings</a>
+            <a href="/wallet">Wallet</a>
+            <a href="/dashboard">Dashboard</a>
+        </div>
+    </div>
+    <nav>
+
+    </nav>
+  </header>
+    <h1>Inbox</h1>
+
+    <% if (paymentRecords.length > 0) { %>
+        <ul>
+            <% paymentRecords.forEach(record => { %>
+                <li>
+                    <p>Time and Date: <%= record.timeAndDate %></p>
+                    <p>Credit Card Number: <%= record.creditCardNumber %></p>
+                    <p>Requested Amount: <%= record.requestedAmount %></p>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p class="no-records">No payment records found.</p>
+    <% } %>
+
+</body>
+      <footer>
+        <div>
+            <p>&copy; 2023 Dzair Earn. All rights reserved.<br>Designed by I.E Aris</p>
+        </div>
+          <div>
+              <a href="/privacy-policy">Privacy Policy</a>
+              <a href="/terms-of-use">Terms of Use</a>
+          </div>
+          <div>
+              <!-- Social Media Icons -->
+              <a href="https://www.facebook.com/yourcompany" target="_blank">
+                  <img src="facebook-icon.png" alt="Facebook Icon">
+              </a>
+              <a href="https://www.youtube.com/yourcompany" target="_blank">
+                  <img src="youtube-icon.png" alt="YouTube Icon">
+              </a>
+              <a href="https://www.tiktok.com/@yourcompany" target="_blank">
+                  <img src="tiktok-icon.png" alt="TikTok Icon">
+              </a>
+          </div>
+      </footer>
+</html>

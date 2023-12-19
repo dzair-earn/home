@@ -1,0 +1,149 @@
+<!-- views/blog.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Explore Blogs</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .blog-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .blog {
+            flex: 0 0 calc(33.33% - 20px);
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        /* Adjust margin for the last blog in the row */
+        .blog:nth-child(3n) {
+            margin-right: 0;
+        }
+
+        .blog h2 {
+            color: #333;
+        }
+
+        .blog p {
+            color: #666;
+        }
+
+        .blog a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .blog a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button onclick="window.location.href='/login'" class="button" style="background-color: #e74c3c;">Login</button>
+        <button onclick="window.location.href='/signup'" class="button" style="background-color: #27ae60;">Signup</button>
+        <button onclick="window.location.href='/about'" class="button" style="background-color: #3498db;">About</button>
+    </div>
+
+    <div class="blog-container">
+        <h1>Explore Blogs</h1>
+
+        <% if (searchQuery) { %>
+            <p>Search results for: <%= searchQuery %></p>
+        <% } %>
+
+        <% if (blogs.length === 0) { %>
+            <p>No blogs available.</p>
+        <% } else { %>
+            <div class="blog-grid">
+                <% blogs.forEach(blog => { %>
+                    <div class="blog">
+                        <h2><%= blog.title %></h2>
+                        <p>Published on <%= blog.timestamp %></p>
+                        <a href="/blog/<%= encodeURIComponent(blog.title) %>">Read More</a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Add search functionality if needed -->
+    <form action="/blog/search" method="get" class="button-container">
+    </form>
+</body>
+</html>
